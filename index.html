@@ -6,56 +6,73 @@
         <link rel="stylesheet" href="stylesheet.css">
     </head>
     <body>
-        <div id="drawSpace"></div>
 
         <script>
-            let resolution = 2;
-            document.body.style.margin = "0px";
+            // Setup title
+            const title = document.createElement('h1');
+            title.textContent = "Sketchpad";
+            document.body.append(title);
+            
+            // Setup button
             const bt = document.createElement("button");
             bt.width = "100px";
             bt.height = "50px";
-            bt.textContent = "Reset";
+            bt.textContent = "Reset / Re-size";
             bt.addEventListener("click", createGridPrompt);
             document.body.append(bt);
-            createGrid(resolution);
 
-            function changeColor (e) {
-                //if(e.target.className !== "boxSquare") return;
-                e.target.style.backgroundColor = "black";
-                //console.log(e.target);
-            };
+            // Setup draw space
+            const dSpace = document.createElement("div");
+            dSpace.id = "drawSpace";
+            document.body.append(dSpace);
 
-            function createGridPrompt() {
-                let size = prompt("#:", "2");
-                createGrid(size);
-            };
+            // Setup initial grid
+            let initialResolution = 16;
+            createGrid(initialResolution);
 
             function createGrid(resolution) {
-                let elements = document.getElementsByClassName('boxSquare');
-                while(elements.length > 0) {
-                    elements[0].parentNode.removeChild(elements[0]);
-                }
-
                 for (let rows = 0; rows < resolution; rows++) {
                     const row = document.createElement("div");
                     row.className = "row";
                     row.style.clear = "both";
+
                     for (let columns = 0; columns < resolution; columns++) {
                         const box = document.createElement("div");
                         box.className = "boxSquare";
-                        box.style.backgroundColor = "red";
-                        box.style.width = "calc(99vw/" + resolution + ")";
-                        box.style.height = "calc(90vh/" + resolution + ")";
+                        box.style.backgroundColor = "#303030";
+                        box.style.border = "1px solid white";
+                        box.style.width = "calc(80vh/" + resolution + ")";
+                        box.style.height = "calc(80vh/" + resolution + ")";
                         box.style.float = "left";
-                        box.style.margin = "0px";
+                        box.style.boxSizing = "border-box";
                         box.id = "box" + rows + columns;
                         row.appendChild(box);
                     };
-                    document.body.append(row);
+
+                    document.getElementById('drawSpace').append(row);
+                    //document.body.append(row);
                 };
+
                 const boxes = document.querySelectorAll('.boxSquare');
                 boxes.forEach(box => box.addEventListener('mouseover', changeColor));
             }
+
+            function changeColor (e) {
+                e.target.style.backgroundColor = "royalblue";
+            };
+
+            function createGridPrompt() {
+                const size = prompt("# of rows/columns:", "16");
+                eraseGrid();
+                createGrid(size);
+            };
+            
+            function eraseGrid() {
+                const elements = document.getElementsByClassName('boxSquare');
+                while(elements.length > 0) {
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+            };
         </script>
     </body>
 </html>
